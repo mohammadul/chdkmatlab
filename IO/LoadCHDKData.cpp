@@ -16,8 +16,8 @@ mxGetNumberOfDimensions(P)==2 && !mxIsSparse(P) && mxIsDouble(P))
 #define IS_STRING(P) (mxIsChar(P))
 #define IMG_OUT plhs[0]
 #define FNAME_IN prhs[0]
-#define OUTBITS_IN prhs[1]
-#define RAW_SIZE_IN prhs[2]
+#define INPUT_FORMAT_IN prhs[1]
+#define SIZE_IN prhs[2]
 
 
 typedef unsigned (*get_pixel_func_t)(uint8_t *p, unsigned row_bytes, unsigned x, unsigned y);
@@ -111,7 +111,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     mwSize buflen;
 
     /* check number of arguments */
-    /** out = LoadCHDKData(filename, outputbit) **/
+    /** out = LoadCHDKData(filename, input_format, size) **/
 
     if(nrhs<1 || nrhs>2) mexErrMsgTxt("Wrong number of input arguments.");
     else if(nlhs>1) mexErrMsgTxt("Too many output arguments.");
@@ -124,18 +124,18 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
     else
     {
-        if(mxIsEmpty(RAW_SIZE_IN))
+        if(mxIsEmpty(SIZE_IN))
         {
             height = 2480;
             width = 3336;
         }
         else
         {
-            if(!IS_REAL_2D_FULL_DOUBLE(RAW_SIZE_IN) || mxGetNumberOfElements(RAW_SIZE_IN)!=2) mexErrMsgTxt("RAW_SIZE must be 2X1 or 1X2 positive full double array.");
-            size_in = mxGetPr(RAW_SIZE_IN);
+            if(!IS_REAL_2D_FULL_DOUBLE(SIZE_IN) || mxGetNumberOfElements(SIZE_IN)!=2) mexErrMsgTxt("SIZE must be 2X1 or 1X2 positive full double array.");
+            size_in = mxGetPr(SIZE_IN);
             height = static_cast<int>(size_in[0]);
             width = static_cast<int>(size_in[1]);
-            if(height<0 || width<0)mexErrMsgTxt("RAW_SIZE must be 2X1 or 1X2 positive full double array.");
+            if(height<0 || width<0)mexErrMsgTxt("SIZE must be 2X1 or 1X2 positive full double array.");
             if((width*op->ibpp)%8 != 0)
             {
                 mexWarnMsgTxt("WIDTH is not an integral number of bytes at input BPP.");
@@ -146,11 +146,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     if(nrhs<2) op = find_op(1);
     else
     {
-        if(mxIsEmpty(OUTBITS_IN)) op = find_op(1);
+        if(mxIsEmpty(INPUT_FORMAT_IN)) op = find_op(1);
         else
         {
-            if(!IS_REAL_SCALAR(OUTBITS_IN) || mxGetScalar(OUTBITS_IN)<0 || mxGetScalar(OUTBITS_IN)>3) mexErrMsgTxt("INPUT_BPP must be between 0 and 3.");
-            op = find_op(static_cast<int>(mxGetScalar(OUTBITS_IN)));
+            if(!IS_REAL_SCALAR(INPUT_FORMAT_IN) || mxGetScalar(INPUT_FORMAT_IN)<0 || mxGetScalar(INPUT_FORMAT_IN)>3) mexErrMsgTxt("INPUT_FORMAT must be between 0 and 3.");
+            op = find_op(static_cast<int>(mxGetScalar(INPUT_FORMAT_IN)));
         }
     }
 
