@@ -1,7 +1,7 @@
 %LOADCHDKDATA - Imports CHDK RAW Data
-%   im = LoadCHDKData(fname, input_bpp, size)
+%   im = LoadCHDKData(fname, input_format, size)
 %       fname - input CHDK raw image filename
-%       input_bpp - input raw bpp (0 - 3)
+%       input_format - input raw bpp format (0 - 3)
 %           0 - 8 bits per pixel
 %           1 - 10 bits per pixel (default)
 %           2 - 12 bits per pixel
