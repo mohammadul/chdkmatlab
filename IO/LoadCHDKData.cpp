@@ -135,7 +135,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     /* check number of arguments */
     /** out = LoadCHDKData(filename, input_format, size) **/
 
-    if(nrhs<1 || nrhs>2) mexErrMsgTxt("Wrong number of input arguments.");
+    if(nrhs<1 || nrhs>3) mexErrMsgTxt("Wrong number of input arguments.");
     else if(nlhs>1) mexErrMsgTxt("Too many output arguments.");
 
     /* check all arguments one by one if valid or set default if empty */
